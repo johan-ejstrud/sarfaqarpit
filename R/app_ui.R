@@ -11,7 +11,14 @@ app_ui <- function(request) {
     # Your application UI logic
     fluidPage(
       h1("Sarfaqarpit?"),
-      leaflet::leafletOutput("map")
+      leafletOutput("map"),
+      p(),
+      fluidRow(
+        column(4),
+        column(1, actionButton("no", "No power", class = "btn-danger")),
+        column(1),
+        column(1, actionButton("yes", "Power", class = "btn-success"))
+      )
     )
   )
 }
