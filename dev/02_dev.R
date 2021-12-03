@@ -17,6 +17,8 @@
 ## Add one line by package you want to add as dependency
 usethis::use_package( "leaflet" )
 usethis::use_package( "tibble" )
+usethis::use_package( "googlesheets4" )
+usethis::use_package( "googledrive" )
 
 ## Add modules ----
 ## Create a module infrastructure in R/
