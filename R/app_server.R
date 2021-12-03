@@ -7,6 +7,11 @@
 app_server <- function( input, output, session ) {
   map = createLeafletMap(session, "map")
 
+  googlesheets4::gs4_auth(cache=".secrets", email="johan.ejstrud@gmail.com")
+  googlesheet <- googlesheets4::gs4_get("1FfmjuUcedOGODkuetrpLXIYYSdKRVQG4oc5EKEEBno0")
+
+  points <- reactiveVal(googlesheets4::read_sheet(ss))
+
   output$map <- renderLeaflet({
     leaflet() %>%
       fitBounds(lat1=64.20, lng1=-51.75, lat2=64.15, lng2=-51.65) %>%
@@ -33,21 +38,17 @@ app_server <- function( input, output, session ) {
       addMarkers(data = cbind(click()$lng, click()$lat), group="click")
   })
 
-  points <- reactiveVal(data.frame(lat=as.double(),
-                                   lng=as.double(),
-                                   hasPower=as.logical()
-                                   )
-                        )
+  save_click_data <- function(clickedHasPower) {
+    googlesheets4::sheet_append(ss,
+                                data.frame(lat=click()$lat,
+                                           lng=click()$lng,
+                                           hasPower=clickedHasPower,
+                                           time=Sys.time()))
 
-  add_click_to_points <- function(clickedHasPower) {
-    points(
-      points() %>%
-        tibble::add_row(lng=click()$lng,
-                        lat=click()$lat,
-                        hasPower=clickedHasPower)
-    )
+    # Refresh data
+    points(googlesheets4::read_sheet(ss))
   }
 
-  observeEvent(input$no,  add_click_to_points(clickedHasPower=FALSE))
-  observeEvent(input$yes, add_click_to_points(clickedHasPower=TRUE))
+  observeEvent(input$no,  save_click_data(clickedHasPower=FALSE))
+  observeEvent(input$yes, save_click_data(clickedHasPower=TRUE))
 }
