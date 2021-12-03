@@ -14,8 +14,6 @@ app_server <- function( input, output, session ) {
 
   hide_buttons()
 
-  map = createLeafletMap(session, "map")
-
   googlesheets4::gs4_auth(cache=".secrets", email="johan.ejstrud@gmail.com")
   googlesheet <- googlesheets4::gs4_get("1FfmjuUcedOGODkuetrpLXIYYSdKRVQG4oc5EKEEBno0")
 
