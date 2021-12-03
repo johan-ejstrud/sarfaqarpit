@@ -11,6 +11,7 @@ Imports:
     leaflet,
     pkgload,
     shiny (>= 1.7.1),
+    shinyjs,
     tibble
 Encoding: UTF-8
 LazyData: true

@@ -5,6 +5,15 @@
 #' @import shiny leaflet
 #' @noRd
 app_server <- function( input, output, session ) {
+  hide_buttons <- function() {
+    lapply(c("yes", "no"), shinyjs::hide)
+  }
+  show_buttons <- function() {
+    lapply(c("yes", "no"), shinyjs::show)
+  }
+
+  hide_buttons()
+
   map = createLeafletMap(session, "map")
 
   googlesheets4::gs4_auth(cache=".secrets", email="johan.ejstrud@gmail.com")
@@ -33,6 +42,9 @@ app_server <- function( input, output, session ) {
     }
 
     message("click!")
+
+    show_buttons()
+
     leafletProxy("map") %>%
       clearGroup(group="click") %>%
       addMarkers(data = cbind(click()$lng, click()$lat), group="click")
@@ -44,6 +56,8 @@ app_server <- function( input, output, session ) {
                                            lng=click()$lng,
                                            hasPower=clickedHasPower,
                                            time=Sys.time()))
+
+    hide_buttons()
 
     # Refresh data
     points(googlesheets4::read_sheet(ss))

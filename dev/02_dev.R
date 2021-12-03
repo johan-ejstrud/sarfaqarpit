@@ -18,7 +18,7 @@
 usethis::use_package( "leaflet" )
 usethis::use_package( "tibble" )
 usethis::use_package( "googlesheets4" )
-usethis::use_package( "googledrive" )
+usethis::use_package( "shinyjs" )
 
 ## Add modules ----
 ## Create a module infrastructure in R/
