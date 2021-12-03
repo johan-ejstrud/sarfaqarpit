@@ -22,7 +22,12 @@ app_server <- function( input, output, session ) {
   output$map <- renderLeaflet({
     leaflet() %>%
       fitBounds(lat1=64.20, lng1=-51.75, lat2=64.15, lng2=-51.65) %>%
-      addProviderTiles(providers$Stamen.Toner) %>%
+      addProviderTiles(providers$Stamen.Toner)
+  })
+
+  observe({
+    leafletProxy("map") %>%
+      clearMarkers() %>%
       addCircleMarkers(data=subset(points(), hasPower),
                        fillColor="green",
                        stroke=FALSE) %>%
